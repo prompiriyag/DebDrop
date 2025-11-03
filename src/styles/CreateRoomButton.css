@@ -1,0 +1,36 @@
+.create-room {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
+}
+
+.qr-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  background: var(--bg-card);
+  padding: 1.5em 2.5em;
+  border-radius: var(--radius);
+  box-shadow: 0 0 15px #7c3aed33;
+  transition: var(--transition);
+}
+
+.qr-box:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px #7c3aed55;
+}
+
+.qr-image {
+  width: 220px;
+  height: 220px;
+  border-radius: 12px;
+}
+
+.join-link {
+  word-break: break-all;
+  color: var(--accent-light);
+  text-align: center;
+  font-size: 0.95rem;
+}

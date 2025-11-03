@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #0b0811;
+  --bg-card: #151122;
+  --accent: #7c3aed;
+  --accent-light: #a78bfa;
+  --accent-glow: #8b5cf6;
+  --text-color: #f4f3f7;
+  --subtext: #9c9aa2;
+  --danger: #ef4444;
+  --radius: 16px;
+  --transition: 0.25s ease;
+  --max-width: 900px;
+}
+
+html, body, .app {
+  background: radial-gradient(circle at 20% 30%, #0f0a1a 0%, #0b0811 100%);
+  color: var(--text-color);
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+button, .btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.8em 1.4em;
+  font-weight: 600;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 0 12px #7c3aed44;
+}
+button:hover, .btn:hover {
+  background: var(--accent-light);
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px #8b5cf666;
+}
+
+.btn-danger {
+  background: var(--danger);
+}
+
+a {
+  color: var(--accent-light);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+    padding: 0 1em;
+  }
+}

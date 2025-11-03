@@ -1,0 +1,31 @@
+.page.home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2em;
+}
+
+.title {
+  font-size: 3rem;
+  color: var(--accent-light);
+  text-shadow: 0 0 20px #7c3aed88;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  max-width: 420px;
+  color: var(--subtext);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.2rem;
+  }
+  .subtitle {
+    font-size: 1rem;
+  }
+}

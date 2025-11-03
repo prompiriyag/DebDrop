@@ -1,0 +1,60 @@
+.upload-box {
+  width: 100%;
+  max-width: var(--max-width);
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  box-shadow: 0 0 10px #00000033;
+}
+
+.upload-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.expiry-label {
+  color: var(--subtext);
+  font-weight: 500;
+}
+
+.expiry-select {
+  background: #211934;
+  color: var(--text-color);
+  border: 1px solid #3f2a68;
+  border-radius: var(--radius);
+  padding: 0.4em 0.7em;
+  font-weight: 500;
+}
+
+.upload-input-wrapper {
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius);
+  padding: 3em;
+  text-align: center;
+  cursor: pointer;
+  background: #1b132a;
+  transition: var(--transition);
+}
+.upload-input-wrapper:hover {
+  background: #251a3d;
+  box-shadow: 0 0 15px #7c3aed44;
+}
+.upload-text {
+  color: var(--subtext);
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+}
+.upload-input {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .upload-input-wrapper {
+    padding: 2em;
+  }
+}
