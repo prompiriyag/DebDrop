@@ -1,7 +1,5 @@
 export const config = {
-  api: {
-    bodyParser: false,
-  },
+  api: { bodyParser: false, responseLimit: false },
 };
 
 export default async function handler(req, res) {
@@ -11,20 +9,21 @@ export default async function handler(req, res) {
   }
 
   try {
-    const url = new URL(req.url, "http://localhost");
-    const expires = url.searchParams.get("expires") || "1d";
+    const { searchParams } = new URL(req.url, `http://${req.headers.host}`);
+    const expires = searchParams.get("expires") || "1d";
 
-    const chunks = [];
-    for await (const chunk of req) chunks.push(chunk);
-    const bodyBuffer = Buffer.concat(chunks);
-
-    const upstream = await fetch(`https://file.io/?expires=${encodeURIComponent(expires)}`, {
+    const upstream = await fetch(`https://www.file.io/?expires=${encodeURIComponent(expires)}`, {
       method: "POST",
-      headers: { "content-type": req.headers["content-type"] || "application/octet-stream" },
-      body: bodyBuffer,
+      headers: {
+        "content-type": req.headers["content-type"] || "application/octet-stream",
+      },
+      body: req,
     });
 
-    const data = await upstream.json().catch(() => ({ success: false }));
+    const text = await upstream.text();
+    let data;
+    try { data = JSON.parse(text); } catch { data = { success: false, raw: text }; }
+
     res.status(upstream.status).json(data);
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
