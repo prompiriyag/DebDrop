@@ -3,6 +3,12 @@ import { db, serverTimestamp } from "../app/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import "../styles/UploadBox.css";
 
+const mapExpiry = (e) => {
+  if (e === "1h" || e === "6h") return e === "6h" ? "12h" : "1h";
+  if (e === "1d") return "24h";
+  return "24h";
+};
+
 export default function UploadBox({ roomId, disabled }) {
   const [expiry, setExpiry] = useState("1d");
   const [busy, setBusy] = useState(false);
@@ -13,27 +19,18 @@ export default function UploadBox({ roomId, disabled }) {
       return;
     }
 
-    console.log("📤 upload ->", file.name, "expiry:", expiry);
+    const litterTime = mapExpiry(expiry);
+    const form = new FormData();
+    form.append("reqtype", "fileupload");
+    form.append("time", litterTime);
+    form.append("fileToUpload", file, file.name);
 
-    const resp = await fetch(`/api/fileio?expires=${expiry}`, {
-      method: "POST",
-      headers: {
-        "content-type": file.type || "application/octet-stream",
-      },
-      body: file,
-    });
-
-    let data;
-    try {
-      data = await resp.json();
-    } catch {
-      data = { success: false };
-    }
-    console.log("📦 file.io response:", data);
+    const resp = await fetch(`/api/litter`, { method: "POST", body: form });
+    const data = await resp.json().catch(() => ({ success: false }));
 
     if (!resp.ok || !data?.success || !data?.link) {
-      console.error("❌ file.io failed:", { status: resp.status, data });
-      alert("อัปโหลดไป file.io ไม่สำเร็จ");
+      console.error("❌ litterbox failed:", { status: resp.status, data });
+      alert("อัปโหลดไป Litterbox ไม่สำเร็จ");
       return;
     }
 
@@ -42,10 +39,9 @@ export default function UploadBox({ roomId, disabled }) {
       downloadURL: data.link,
       sizeBytes: file.size,
       createdAt: serverTimestamp(),
-      expiry, 
-      provider: "file.io",
+      expiry: litterTime,
+      provider: "litterbox",
     });
-
     console.log("✅ addDoc OK:", file.name);
   };
 
@@ -55,12 +51,7 @@ export default function UploadBox({ roomId, disabled }) {
 
     setBusy(true);
     try {
-      for (const f of files) {
-        await uploadOne(f);
-      }
-    } catch (err) {
-      console.error("🔥 upload error:", err);
-      alert("เกิดข้อผิดพลาดระหว่างอัปโหลด");
+      for (const f of files) await uploadOne(f);
     } finally {
       setBusy(false);
       e.target.value = "";
@@ -85,16 +76,8 @@ export default function UploadBox({ roomId, disabled }) {
       </div>
 
       <label className="upload-input-wrapper">
-        <div className="upload-text">
-          {busy ? "Uploading..." : "Click or drag to upload files"}
-        </div>
-        <input
-          type="file"
-          multiple
-          onChange={onPick}
-          className="upload-input"
-          disabled={disabled || busy}
-        />
+        <div className="upload-text">{busy ? "Uploading..." : "Click or drag to upload files"}</div>
+        <input type="file" multiple onChange={onPick} className="upload-input" disabled={disabled || busy} />
       </label>
     </div>
   );
