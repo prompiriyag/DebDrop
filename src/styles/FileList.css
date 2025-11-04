@@ -10,6 +10,7 @@
 }
 
 .file-item {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,7 +19,9 @@
   border-radius: var(--radius);
   transition: var(--transition);
   box-shadow: 0 0 10px #00000033;
+  box-sizing: border-box;
 }
+
 .file-item:hover {
   background: #201539;
   box-shadow: 0 0 14px #7c3aed33;
@@ -28,11 +31,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.2em;
+  color: var(--text-color);
 }
+
 .file-name {
   font-weight: 600;
   color: var(--text-color);
 }
+
 .file-expiry {
   color: var(--subtext);
   font-size: 0.9em;
@@ -46,7 +52,10 @@
   padding: 0.5em 1em;
   cursor: pointer;
   transition: var(--transition);
+  text-decoration: none;
+  box-sizing: border-box;
 }
+
 .btn-download:hover {
   background: var(--accent-light);
   transform: translateY(-2px);
@@ -62,9 +71,15 @@
 @media (max-width: 768px) {
   .file-item {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 0.7em;
   }
+
+  .file-info {
+    width: 100%;
+    word-wrap: break-word;
+  }
+
   .btn-download {
     width: 100%;
     text-align: center;
