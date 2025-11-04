@@ -1,13 +1,5 @@
 {
   "version": 2,
-  "functions": {
-    "api/*.js": {
-      "runtime": "@vercel/node@18"
-    },
-    "api/cron/*.js": {
-      "runtime": "@vercel/node@18"
-    }
-  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
