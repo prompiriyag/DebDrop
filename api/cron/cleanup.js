@@ -1,4 +1,4 @@
-const admin = require("firebase-admin");
+import admin from "firebase-admin";
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -12,7 +12,7 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   if (req.method !== "GET" && req.method !== "POST") {
     return res.status(405).json({ ok: false, error: "Method not allowed" });
   }
@@ -20,12 +20,14 @@ module.exports = async (req, res) => {
   try {
     const now = admin.firestore.Timestamp.now();
 
-    const snap = await db.collection("rooms")
+    const snap = await db
+      .collection("rooms")
       .where("expiresAt", "<", now)
       .limit(200)
       .get();
 
-    let deletedRooms = 0, deletedFiles = 0;
+    let deletedRooms = 0;
+    let deletedFiles = 0;
 
     for (const docSnap of snap.docs) {
       const roomRef = docSnap.ref;
@@ -35,7 +37,7 @@ module.exports = async (req, res) => {
         const batchSnap = await filesRef.limit(300).get();
         if (batchSnap.empty) break;
         const batch = db.batch();
-        batchSnap.forEach(d => batch.delete(d.ref));
+        batchSnap.forEach((d) => batch.delete(d.ref));
         await batch.commit();
         deletedFiles += batchSnap.size;
       }
@@ -49,4 +51,4 @@ module.exports = async (req, res) => {
     console.error("cleanup error:", e);
     return res.status(500).json({ ok: false, error: e.message });
   }
-};
+}
